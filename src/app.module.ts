@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,6 +14,9 @@ import { RatesModule } from './modules/country/rates/rates.module';
 import { CountryModule } from './modules/country/country.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { AcceptLanguageResolver, I18nMiddleware, I18nModule, QueryResolver } from 'nestjs-i18n';
+import { LanguageMiddleware } from './middleware/i18n.middleware';
+import { NewsModule } from './modules/news/news.module';
 
 @Module({
   imports: [
@@ -53,13 +56,31 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads'
     }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      loaderOptions: {
+        path: join(__dirname, '/i18n/'),
+        watch: true,
+        global: true
+      },
+      resolvers: [
+        new QueryResolver(['lang', 'language']),
+        new AcceptLanguageResolver(),
+      ],
+      typesOutputPath: join(__dirname, '../src/generated/i18n.generated.ts'),
+    }),
     AuthModule,
     UserModule,
     RatesModule,
     CountryModule,
-    UploadModule
+    UploadModule,
+    NewsModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    return consumer.apply(I18nMiddleware, LanguageMiddleware).forRoutes('*');
+  }
+}

@@ -1,0 +1,19 @@
+{
+    "notFound": "{key} not found",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "You do not have permission to perform this action",
+    "badRequest": "Bad request",
+    "conflict": "{key} already exists",
+    "internalServerError": "Internal server error",
+    "validationFailed": "{key} field is invalid",
+    "tooManyRequests": "Too many requests",
+    "unprocessableEntity": "Unprocessable entity",
+    "methodNotAllowed": "This method is not allowed",
+    "unauthenticated": "Unauthenticated user",
+    "expiredToken": "Token has expired",
+    "invalidCredentials": "Invalid credentials",
+    "resourceExists": "{key} already exists in the database",
+    "databaseError": "Database error",
+    "missingField": "{key} field is required",
+    "accessDenied": "Access denied"
+}

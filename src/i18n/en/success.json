@@ -1,0 +1,5 @@
+{
+    "deleted": "{key} has been successfully deleted.",
+    "updated": "{key} has been successfully updated.",
+    "created": "{key} has been successfully created."
+}

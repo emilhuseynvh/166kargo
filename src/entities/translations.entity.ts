@@ -1,25 +1,22 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { CountryEntity } from "./country.entity";
 import { NewsEntity } from "./news.entity";
+import { Lang } from "src/shared/enums/lang.enum";
 
-@Entity('upload')
-export class UploadEntity {
+@Entity('translations')
+export class TranslationsEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    filename: string;
+    field: string;
 
     @Column()
-    path: string;
+    value: string;
 
-    @Column()
-    mimetype: string;
+    @Column({ type: 'enum', enum: Lang })
+    lang: string;
 
-    @OneToMany(() => CountryEntity, country => country.flag)
-    country: CountryEntity;
-
-    @OneToMany(() => NewsEntity, news => news.image)
+    @ManyToOne(() => NewsEntity, news => news.translation, { onDelete: 'CASCADE' })
     news: NewsEntity;
 
     @CreateDateColumn()

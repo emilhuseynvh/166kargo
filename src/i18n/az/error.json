@@ -1,0 +1,19 @@
+{
+    "notFound": "{key} tapılmadı",
+    "unauthorized": "İcazəsiz giriş",
+    "forbidden": "Bu əməliyyatı yerinə yetirmək icazəniz yoxdur",
+    "badRequest": "Yanlış sorğu",
+    "conflict": "{key} artıq mövcuddur",
+    "internalServerError": "Server xətası",
+    "validationFailed": "{key} sahəsi düzgün deyil",
+    "tooManyRequests": "Çox sayda sorğu göndərildi",
+    "unprocessableEntity": "Sorğu emal edilə bilmir",
+    "methodNotAllowed": "Bu metod icazə verilmir",
+    "unauthenticated": "Təsdiqlənməmiş istifadəçi",
+    "expiredToken": "Tokenin müddəti bitib",
+    "invalidCredentials": "Yanlış giriş məlumatları",
+    "resourceExists": "{key} artıq bazada mövcuddur",
+    "databaseError": "Məlumat bazası xətası",
+    "missingField": "{key} sahəsi tələb olunur",
+    "accessDenied": "Sizə giriş icazəsi yoxdur"
+}

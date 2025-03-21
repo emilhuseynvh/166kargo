@@ -1,0 +1,19 @@
+{
+    "notFound": "{key} не найден",
+    "unauthorized": "Несанкционированный доступ",
+    "forbidden": "У вас нет разрешения на выполнение этого действия",
+    "badRequest": "Неверный запрос",
+    "conflict": "{key} уже существует",
+    "internalServerError": "Внутренняя ошибка сервера",
+    "validationFailed": "Поле {key} недействительно",
+    "tooManyRequests": "Слишком много запросов",
+    "unprocessableEntity": "Невозможно обработать сущность",
+    "methodNotAllowed": "Этот метод не разрешен",
+    "unauthenticated": "Пользователь не аутентифицирован",
+    "expiredToken": "Срок действия токена истек",
+    "invalidCredentials": "Неверные учетные данные",
+    "resourceExists": "{key} уже существует в базе данных",
+    "databaseError": "Ошибка базы данных",
+    "missingField": "Поле {key} является обязательным",
+    "accessDenied": "Доступ запрещен"
+}
