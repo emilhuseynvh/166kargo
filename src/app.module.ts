@@ -17,6 +17,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AcceptLanguageResolver, I18nMiddleware, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { LanguageMiddleware } from './middleware/i18n.middleware';
 import { NewsModule } from './modules/news/news.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -68,6 +70,15 @@ import { NewsModule } from './modules/news/news.module';
         new AcceptLanguageResolver(),
       ],
       typesOutputPath: join(__dirname, '../src/generated/i18n.generated.ts'),
+    }),
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore({
+        socket: {
+          host: config.redisHost,
+          port: config.redisPort
+        },
+      }),
     }),
     AuthModule,
     UserModule,

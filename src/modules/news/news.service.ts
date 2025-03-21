@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { NewsEntity } from "src/entities/news.entity";
 import { Repository } from "typeorm";
@@ -8,20 +8,33 @@ import { I18nTranslations } from "src/generated/i18n.generated";
 import { ClsService } from "nestjs-cls";
 import { mapTranslation } from "src/shared/utils/translations.util";
 import { UpdateNewsDto } from "./dto/update-news.dto";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
+import { UploadEntity } from "src/entities/upload.entity";
 
 @Injectable()
 export class NewsService {
     constructor(
         @InjectRepository(NewsEntity)
         private newsRepo: Repository<NewsEntity>,
+
+        @InjectRepository(UploadEntity)
+        private uploadRepo: Repository<UploadEntity>,
+
         private cls: ClsService,
-        private i18n: I18nService<I18nTranslations>
+        private i18n: I18nService<I18nTranslations>,
+        @Inject(CACHE_MANAGER) private redis: Cache
     ) { }
 
     async list(page: number = 1, limit: number = 10) {
         let lang = this.cls.get<string>('lang');
 
         let skip = (page - 1) * limit;
+
+        if (page === 1) {
+            let cacheData = await this.redis.get('news');
+            if (cacheData) return { cache: true, ...cacheData };
+        }
 
         let [news, total] = await this.newsRepo.findAndCount({
             where: {
@@ -48,7 +61,9 @@ export class NewsService {
         let args = this.i18n.t('arguments.news');
         if (!news.length) throw new NotFoundException(this.i18n.t('error.notFound', { args: { key: args } }));
 
-        return {
+
+
+        let result = {
             news: news.map(mapTranslation),
             meta: {
                 currentPage: page,
@@ -58,10 +73,25 @@ export class NewsService {
             }
         };
 
+        await this.redis.set('news', result);
+
+        return result;
+
     }
 
     async create(params: CreateNewsDto) {
         let translation: any = [];
+
+        let checkImage = await this.uploadRepo.findOne({
+            where: { id: params.image }
+        });
+
+        if (!checkImage) {
+            let args = this.i18n.t('arguments.image');
+            throw new NotFoundException(this.i18n.t('error.notFound', { args: { key: args } }));
+        }
+
+        await this.redis.del('news');
 
         for (let element of params.translations) {
             translation.push({

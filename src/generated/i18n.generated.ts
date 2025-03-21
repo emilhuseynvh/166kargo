@@ -7,6 +7,7 @@ import { Path } from "nestjs-i18n";
 export type I18nTranslations = {
     "arguments": {
         "news": string;
+        "image": string;
     };
     "error": {
         "notFound": string;
