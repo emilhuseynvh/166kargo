@@ -122,12 +122,10 @@ export class NewsService {
 
         let args = this.i18n.t('arguments.news');
         if (!result.affected) throw new NotFoundException(this.i18n.t('error.notFound', { args: { key: args } }));
-
         return {
             message: this.i18n.t('success.deleted', { args: { key: args } })
         };
     }
-
     async update(id: number, params: UpdateNewsDto) {
         let news = await this.newsRepo.findOne({
             where: { id },

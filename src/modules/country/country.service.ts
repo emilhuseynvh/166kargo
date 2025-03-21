@@ -4,12 +4,16 @@ import { CountryEntity } from "src/entities/country.entity";
 import { Repository } from "typeorm";
 import { CreateCountryDto } from "./dto/create-country.dto";
 import { UpdateCountryDto } from "./dto/update-country.dto";
+import { I18nService } from "nestjs-i18n";
+import { I18nTranslations } from "src/generated/i18n.generated";
 
 @Injectable()
 export class CountryService {
     constructor(
         @InjectRepository(CountryEntity)
-        private countryRepo: Repository<CountryEntity>
+        private countryRepo: Repository<CountryEntity>,
+
+        private i18n: I18nService<I18nTranslations>
     ) { }
 
     async list() {
@@ -40,7 +44,10 @@ export class CountryService {
             where: { name: params.name }
         });
 
-        if (check) throw new ConflictException('Country is already exists');
+        if (check) {
+            let args = this.i18n.t('arguments.country');
+            throw new ConflictException(this.i18n.t('error.conflict', { args: { key: args } }));
+        }
 
         let country = this.countryRepo.create({
             name: params.name,
@@ -59,7 +66,10 @@ export class CountryService {
     async update(id: number, params: UpdateCountryDto) {
         let country = await this.countryRepo.findOne({ where: { id } });
 
-        if (!country) throw new NotFoundException('Country is not found');
+        let args = this.i18n.t('arguments.country');
+        if (!country) {
+            throw new ConflictException(this.i18n.t('error.notFound', { args: { key: args } }));
+        }
 
         await this.countryRepo.update(id, {
             ...params,
@@ -67,17 +77,21 @@ export class CountryService {
         });
 
         return {
-            message: "Country updated succesfully"
+            message: this.i18n.t('success.updated', { args: { key: args } })
         };
     }
 
     async deleteCountry(id: number) {
         let result = await this.countryRepo.delete(id);
 
-        if (!result.affected) throw new NotFoundException('Country is not found');
+        let args = this.i18n.t('arguments.country');
+        if (!result.affected) {
+            throw new ConflictException(this.i18n.t('error.notFound', { args: { key: args } }));
+        }
+
 
         return {
-            message: "Country deleted succesfully"
+            message: this.i18n.t('success.deleted', { args: { key: args } })
         };
     }
 

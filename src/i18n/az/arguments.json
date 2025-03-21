@@ -1,4 +1,7 @@
 {
     "news" : "Xəbər",
-    "image" : "Şəkil"
+    "image" : "Şəkil",
+    "country" : "Ölkə",
+    "user" : "İstifadəçi",
+    "password" : "Şifrə"
 }

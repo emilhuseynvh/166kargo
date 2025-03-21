@@ -15,5 +15,8 @@
     "resourceExists": "{key} уже существует в базе данных",
     "databaseError": "Ошибка базы данных",
     "missingField": "Поле {key} является обязательным",
-    "accessDenied": "Доступ запрещен"
+    "accessDenied": "Доступ запрещен",
+    "wrongPassword" : "Неправильный пароль",
+    "passwordsNotMatch" : "Пароли не совпадают",
+    "emailOrPasswordWrong": "Неправильный email или пароль"
 }

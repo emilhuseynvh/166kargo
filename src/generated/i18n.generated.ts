@@ -8,6 +8,9 @@ export type I18nTranslations = {
     "arguments": {
         "news": string;
         "image": string;
+        "country": string;
+        "user": string;
+        "password": string;
     };
     "error": {
         "notFound": string;
@@ -27,6 +30,9 @@ export type I18nTranslations = {
         "databaseError": string;
         "missingField": string;
         "accessDenied": string;
+        "wrongPassword": string;
+        "passwordsNotMatch": string;
+        "emailOrPasswordWrong": string;
     };
     "success": {
         "deleted": string;

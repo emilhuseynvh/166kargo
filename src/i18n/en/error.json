@@ -15,5 +15,8 @@
     "resourceExists": "{key} already exists in the database",
     "databaseError": "Database error",
     "missingField": "{key} field is required",
-    "accessDenied": "Access denied"
+    "accessDenied": "Access denied",
+    "wrongPassword" : "Password is wrong",
+    "passwordsNotMatch" : "Passwords do not match",
+    "emailOrPasswordWrong": "Email or password is wrong"
 }

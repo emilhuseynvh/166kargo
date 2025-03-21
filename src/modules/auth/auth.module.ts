@@ -6,7 +6,7 @@ import { AuthService } from "./auth.service";
 import { PrecinctEntity } from "src/entities/precinct.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserEntity, PrecinctEntity])],
+    imports: [TypeOrmModule.forFeature([UserEntity])],
     controllers: [AuthController],
     providers: [AuthService]
 })

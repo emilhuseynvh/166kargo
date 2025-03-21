@@ -15,5 +15,8 @@
     "resourceExists": "{key} artıq bazada mövcuddur",
     "databaseError": "Məlumat bazası xətası",
     "missingField": "{key} sahəsi tələb olunur",
-    "accessDenied": "Sizə giriş icazəsi yoxdur"
+    "accessDenied": "Sizə giriş icazəsi yoxdur",
+    "wrongPassword": "Şifrə yanlışdır",
+    "passwordsNotMatch": "Şifrələr uyğun gəlmir",
+    "emailOrPasswordWrong": "Email və ya şifrə yanlışdır"
 }

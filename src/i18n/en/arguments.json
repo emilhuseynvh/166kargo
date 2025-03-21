@@ -1,4 +1,7 @@
 {
     "news": "News",
-    "image" : "Image"
+    "image" : "Image",
+    "country" : "Country",
+    "user" : "User",
+    "password" : "Password"
 }

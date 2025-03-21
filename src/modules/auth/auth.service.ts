@@ -9,6 +9,8 @@ import { RegisterAuthDto } from "./dto/register-auth.dto";
 import { PrecinctEntity } from "src/entities/precinct.entity";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { ClsService } from "nestjs-cls";
+import { I18nService } from "nestjs-i18n";
+import { I18nTranslations } from "src/generated/i18n.generated";
 
 @Injectable()
 export class AuthService {
@@ -16,12 +18,12 @@ export class AuthService {
         @InjectRepository(UserEntity)
         private userRepo: Repository<UserEntity>,
 
-        @InjectRepository(PrecinctEntity)
-        private precinctRepo: Repository<PrecinctEntity>,
-
         private jwt: JwtService,
-        private cls: ClsService
+        private cls: ClsService,
+
+        private i18n: I18nService<I18nTranslations>
     ) { }
+
     async login(params: LoginAuthDto) {
         let user = await this.userRepo.findOne({
             where: { email: params.email },
@@ -51,10 +53,10 @@ export class AuthService {
             relations: ['profile', 'profile.precinct']
         });
 
-        if (!user) throw new NotFoundException('Email or password is wrong');
+        if (!user) throw new NotFoundException(this.i18n.t('error.emailOrPasswordWrong'));
 
         let checkPassword = await bcrypt.compare(params.password, user.password);
-        if (!checkPassword) throw new NotFoundException('Email or password is wrong');
+        if (!checkPassword) throw new NotFoundException(this.i18n.t('error.emailOrPasswordWrong'));
 
         let token = this.jwt.sign({ userId: user.id });
 
@@ -82,13 +84,8 @@ export class AuthService {
 
         let checkUser = await this.userRepo.findOne({ where });
 
-        if (checkUser) throw new ConflictException('User is already exists');
-
-        // let precinct = await this.precinctRepo.findOne({
-        //     where: { profile: { id: params.precinct } }
-        // });
-
-        // if (!precinct) throw new NotFoundException('Precinct is not found');
+        let args = this.i18n.t('arguments.user');
+        if (checkUser) throw new ConflictException(this.i18n.t('error.conflict', { args: { key: args } }));
 
         let hashPassword = await bcrypt.hash(params.password, 10);
 
@@ -127,13 +124,15 @@ export class AuthService {
     async resetPassword(params: ResetPasswordDto) {
         let user = this.cls.get<UserEntity>('user');
 
+        let args = this.i18n.t('arguments.password');
+
         if (params.newPassword !== params.comfirmPassword) {
-            throw new BadRequestException('Passwords do not match');
+            throw new BadRequestException(this.i18n.t('error.passwordsNotMatch'));
         }
 
         let checkPassword = await bcrypt.compare(params.currentPassword, user.password);
 
-        if (!checkPassword) throw new BadRequestException('Password is wrong');
+        if (!checkPassword) throw new BadRequestException(this.i18n.t('error.wrongPassword'));
 
         let hashPassword = await bcrypt.hash(params.newPassword, 10);
 
@@ -142,7 +141,7 @@ export class AuthService {
         await user.save();
 
         return {
-            message: "Password is updated succesfully"
+            message: this.i18n.t('success.updated', { args: { key: args } })
         };
     }
 }
